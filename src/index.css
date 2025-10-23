@@ -1,20 +1,7 @@
-/* Global styles for TrenchSpy */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-div[data-rk=''] {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
 }
 
 main {

@@ -71,7 +71,7 @@ const Layout = ({ theme, children }: { theme?: string; children?: React.ReactNod
     }, [user, isConnected, userData, setReferralCode]);
 
     return (
-        <Stack flex={1}>
+        <Stack flex={1} minHeight={'100vh'}>
             <Preloader />
             <Suspense fallback={null}>
                 <SearchParamsHandler />
