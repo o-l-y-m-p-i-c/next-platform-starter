@@ -1,0 +1,1 @@
+export { MobileFixedFooter } from './MobileFixedFooter';

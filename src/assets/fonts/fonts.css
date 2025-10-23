@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'Sarpanch';
+  src: url('/Sarpanch/Sarpanch-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Sarpanch';
+  src: url('/Sarpanch/Sarpanch-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Sarpanch';
+  src: url('/Sarpanch/Sarpanch-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Sarpanch';
+  src: url('/Sarpanch/Sarpanch-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Sarpanch';
+  src: url('/Sarpanch/Sarpanch-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: 'Sarpanch';
+  src: url('/Sarpanch/Sarpanch-Black.ttf') format('truetype');
+  font-weight: 900;
+}

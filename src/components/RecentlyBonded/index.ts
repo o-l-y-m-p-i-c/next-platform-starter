@@ -1,0 +1,1 @@
+export { RecentlyBonded } from './RecentlyBonded';

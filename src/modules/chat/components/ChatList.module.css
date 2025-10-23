@@ -1,0 +1,167 @@
+.chat {
+  text-align: center;
+
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat form {
+  margin-top: auto;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+}
+
+.chat input {
+  width: 100%;
+  font-size: 16px;
+  color: white;
+  outline: none;
+  border: none;
+  padding: 0 10px;
+}
+
+.chat button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sign-in {
+  color: #282c34;
+  background: white;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.chat ul,
+.chat li {
+  text-align: left;
+  list-style: none;
+}
+
+.chat p {
+  max-width: 60%;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  line-height: 24px;
+  padding: 0px 8px;
+  border-radius: 8px;
+  position: relative;
+  color: white;
+  text-align: center;
+}
+
+.message {
+  display: flex;
+  flex: 1;
+}
+
+.sent {
+  flex-direction: row-reverse;
+}
+
+.sent p {
+  color: white;
+  background: #0b93f6;
+  align-self: flex-end;
+  margin: 0;
+  text-align: left;
+}
+.received p {
+  background: #e5e5ea;
+  color: black;
+  text-align: left;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  padding-top: 10px;
+  gap: 10px;
+  & > *:first-child {
+    flex: 1;
+  }
+  input {
+    padding: 5px;
+  }
+}
+
+.messages img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 2px 5px;
+  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  padding: 10px 0;
+  width: 100%;
+  flex: 1;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.messagesEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 20px;
+  font-size: 12px;
+  flex: 1;
+}
+
+.messages_wrap {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  position: relative;
+  min-height: 200px;
+}
+
+.chat_body {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: column;
+  height: 100%;
+}
+
+input.messages_input {
+  padding: 11px 17px;
+  background-color: #393a3f;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.messages_submit {
+  padding: 5px !important;
+  min-width: 38px !important;
+  background: #393a3f !important;
+  border: none !important;
+  width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  --size: 20px;
+  svg {
+    width: var(--size);
+    height: var(--size);
+    path {
+      stroke-width: 1.5;
+    }
+  }
+}

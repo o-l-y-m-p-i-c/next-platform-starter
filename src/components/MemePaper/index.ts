@@ -1,0 +1,1 @@
+export { MemePaper } from './MemePaper';

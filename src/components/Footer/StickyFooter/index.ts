@@ -1,0 +1,1 @@
+export { StickyFooter } from './StickyFooter';

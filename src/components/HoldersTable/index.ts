@@ -1,0 +1,1 @@
+export { HoldersTable } from './HoldersTable';

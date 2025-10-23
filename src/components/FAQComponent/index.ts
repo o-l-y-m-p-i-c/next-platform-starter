@@ -1,0 +1,1 @@
+export { FAQComponent } from './FAQComponent';

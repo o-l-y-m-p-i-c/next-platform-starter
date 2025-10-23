@@ -1,0 +1,1 @@
+export { RecentlyMintedCoins } from './RecentlyMintedCoins';

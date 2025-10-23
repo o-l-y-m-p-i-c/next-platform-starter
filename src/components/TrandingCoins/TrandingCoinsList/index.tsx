@@ -1,0 +1,1 @@
+export { TrandingCoinsList } from './TrandingCoinsList';

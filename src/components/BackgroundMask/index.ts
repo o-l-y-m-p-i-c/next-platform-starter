@@ -1,0 +1,1 @@
+export { BackgroundMask } from './BackgroundMask';
