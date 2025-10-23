@@ -11,7 +11,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import * as Sentry from '@sentry/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { AuthProvider } from '../src/providers/AuthProvider';
 import { SocketProvider } from '../src/providers/SocketProvider';
@@ -105,7 +105,7 @@ const projectId = process.env.NEXT_PUBLIC_API_ID || '';
 let config: ReturnType<typeof getDefaultConfig> | undefined;
 if (typeof window !== 'undefined') {
     config = getDefaultConfig({
-        appName: 'The Thing',
+        appName: 'TrenchSpy',
         projectId,
         chains: isProd ? [mainnet, bsc] : [mainnet, bsc, bscTestnet],
         ssr: true
@@ -170,20 +170,14 @@ function QueryDefaults() {
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setMounted(true);
-    }, []);
-
-    if (!mounted) {
-        return null;
-    }
+    // Check if we're on the client side
+    const isClient = typeof window !== 'undefined';
 
     // If wallet config is not available, render without wallet functionality
-    if (!config) {
-        console.warn('Wallet configuration not available. Running without wallet support.');
+    if (!isClient || !config) {
+        if (isClient && !config) {
+            console.warn('Wallet configuration not available. Running without wallet support.');
+        }
         return (
             <AuthProvider>
                 <AppGlobalProvider>
