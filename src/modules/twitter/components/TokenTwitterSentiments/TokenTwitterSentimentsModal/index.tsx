@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import {
@@ -35,7 +35,8 @@ interface TokenTwitterSentimentsModalProp {
   opened: boolean;
 }
 
-export const TweetExplanation = ({
+// Internal component that uses useSearchParams
+const TweetExplanationContent = ({
   tokens,
   hideCustomMargin = false,
 }: {
@@ -240,6 +241,18 @@ export const TweetExplanation = ({
         pointerEvents: 'none',
       }}
     ></Box>
+  );
+};
+
+// Wrapper component with Suspense boundary
+export const TweetExplanation = (props: {
+  tokens: { token: string; sentiment: string; explanation?: string }[];
+  hideCustomMargin?: boolean;
+}) => {
+  return (
+    <Suspense fallback={null}>
+      <TweetExplanationContent {...props} />
+    </Suspense>
   );
 };
 
