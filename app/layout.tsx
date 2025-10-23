@@ -54,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -63,7 +63,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={`${redHatMono.variable} ${doto.variable}`} suppressHydrationWarning>
+      <body className={`${redHatMono.variable} ${doto.variable}`}>
         <Providers>{children}</Providers>
       </body>
     </html>
