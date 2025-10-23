@@ -19,6 +19,7 @@ import { AppGlobalProvider } from '../src/providers/AppGlobalProvider';
 import { isProd } from '../src/constants/staking.constants';
 import { useFetch } from '../src/hooks';
 import { Router } from './components/RouterWrapper';
+import { Stack } from '@mui/system';
 
 // Initialize Sentry
 if (typeof window !== 'undefined') {
@@ -101,16 +102,13 @@ const theme = createTheme({
 
 const projectId = process.env.NEXT_PUBLIC_API_ID || '';
 
-// Initialize wagmi config only on client side
-let config: ReturnType<typeof getDefaultConfig> | undefined;
-if (typeof window !== 'undefined') {
-    config = getDefaultConfig({
-        appName: 'The Thing',
-        projectId,
-        chains: isProd ? [mainnet, bsc] : [mainnet, bsc, bscTestnet],
-        ssr: true
-    });
-}
+// Initialize config - this is safe to do at module level with ssr: true
+const config = getDefaultConfig({
+    appName: 'TrenchSpy',
+    projectId,
+    chains: isProd ? [mainnet, bsc] : [mainnet, bsc, bscTestnet],
+    ssr: true
+});
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -173,35 +171,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
-
-    if (!mounted) {
-        return null;
-    }
-
-    // If wallet config is not available, render without wallet functionality
-    if (!config) {
-        console.warn('Wallet configuration not available. Running without wallet support.');
-        return (
-            <AuthProvider>
-                <AppGlobalProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <ThemeProvider theme={theme}>
-                            <CssBaseline />
-                            <SocketProvider>
-                                <QueryDefaults />
-                                <ReactQueryDevtools initialIsOpen={false} />
-                                <Router>{children}</Router>
-                            </SocketProvider>
-                        </ThemeProvider>
-                    </QueryClientProvider>
-                </AppGlobalProvider>
-                <ToastContainer theme="dark" />
-            </AuthProvider>
-        );
-    }
 
     // Full app with wallet support
     return (
@@ -212,18 +183,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
                         <ThemeProvider theme={theme}>
                             <CssBaseline />
                             <SocketProvider>
-                                <RainbowKitProvider
-                                    modalSize="wide"
-                                    theme={darkTheme({
-                                        accentColor: '#7b3fe4',
-                                        accentColorForeground: 'white',
-                                        borderRadius: 'medium'
-                                    })}
-                                >
-                                    <QueryDefaults />
-                                    <ReactQueryDevtools initialIsOpen={false} />
+                                {mounted ? (
+                                    <RainbowKitProvider
+                                        modalSize="wide"
+                                        theme={darkTheme({
+                                            accentColor: '#7b3fe4',
+                                            accentColorForeground: 'white',
+                                            borderRadius: 'medium'
+                                        })}
+                                    >
+                                        <QueryDefaults />
+                                        <ReactQueryDevtools initialIsOpen={false} />
+                                        <Router>{children}</Router>
+                                    </RainbowKitProvider>
+                                ) : (
                                     <Router>{children}</Router>
-                                </RainbowKitProvider>
+                                )}
                             </SocketProvider>
                         </ThemeProvider>
                     </WagmiProvider>

@@ -4,16 +4,18 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useAppGlobal } from '@/hooks';
 import { mobileMenuTopList } from '../../../constants/routes.constants';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const MobileFixedFooter = () => {
   const { setSearchOpen } = useAppGlobal();
+  const pathname = usePathname();
+  
   const handleOnSearch = () => {
     setSearchOpen(true);
   };
 
   const activeColor = 'var(--IconButton-hoverBg)';
   const defaultColor = 'transparent';
-  const { pathname } = location;
 
   const leftSideMenu = mobileMenuTopList.filter(
     (item) => item.content === 'Home' || item.content === 'Hype Detector',

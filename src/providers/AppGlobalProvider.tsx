@@ -20,6 +20,9 @@ const AppGlobalProvider = ({ children }: { children: React.ReactNode }) => {
     useState<boolean>(false);
 
   const setAllLocalStorageData = () => {
+    // Check if we're on the client side
+    if (typeof window === 'undefined') return;
+
     const storedAnimation = localStorage.getItem(localStorageAnimationKey);
     const storedFullWidth = localStorage.getItem(localStorageFullWidthKey);
     const storedReferralCode = localStorage.getItem(
@@ -50,41 +53,51 @@ const AppGlobalProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const setAnimationFn = useCallback(async (animationFlag?: boolean) => {
-    localStorage.setItem(
-      localStorageAnimationKey,
-      JSON.stringify(animationFlag),
-    );
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(
+        localStorageAnimationKey,
+        JSON.stringify(animationFlag),
+      );
+    }
 
     setAnimations(animationFlag || false);
   }, []);
 
   const setViewFn = useCallback(async (flag?: boolean) => {
-    localStorage.setItem(localStorageFullWidthKey, JSON.stringify(flag));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(localStorageFullWidthKey, JSON.stringify(flag));
+    }
 
     setFullWidth(flag || false);
   }, []);
 
   const setReferralCodeFn = useCallback(async (code?: string | null) => {
-    if (!code) {
-      localStorage.removeItem(localStorageReferralCodeKey);
-    } else {
-      localStorage.setItem(localStorageReferralCodeKey, code);
+    if (typeof window !== 'undefined') {
+      if (!code) {
+        localStorage.removeItem(localStorageReferralCodeKey);
+      } else {
+        localStorage.setItem(localStorageReferralCodeKey, code);
+      }
     }
 
     setReferralCode(code || null);
   }, []);
 
   const setShowLegalDisclaimerFn = useCallback(async (flag: boolean) => {
-    if (!flag) {
-      localStorage.removeItem(localStorageLegalCheckKey);
-    } else {
-      localStorage.setItem(localStorageLegalCheckKey, flag.toString());
+    if (typeof window !== 'undefined') {
+      if (!flag) {
+        localStorage.removeItem(localStorageLegalCheckKey);
+      } else {
+        localStorage.setItem(localStorageLegalCheckKey, flag.toString());
+      }
     }
 
     setShowLegalDisclaimer(!flag || false);
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     if (animationFlag) {
       document.querySelector('#root')?.classList.remove('default');
     } else {

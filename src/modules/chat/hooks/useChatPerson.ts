@@ -11,6 +11,9 @@ const useChatPerson = (): { from: string; connected: boolean } => {
   const userId = uuidv4();
 
   useEffect(() => {
+    // Check if we're on the client side
+    if (typeof window === 'undefined') return;
+
     const storedId: string | null = localStorage.getItem(STORAGE_KEY);
 
     if (!address && !storedId) {

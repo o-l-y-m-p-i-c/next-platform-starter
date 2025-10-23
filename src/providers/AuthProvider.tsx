@@ -8,39 +8,44 @@ import { AuthContext } from '../context';
 const localStorageKey = 'user';
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<TUser | null>(null);
-  const [isLoading, setLoading] = useState(false);
+    const [user, setUser] = useState<TUser | null>(null);
+    const [isLoading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem(localStorageKey);
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    useEffect(() => {
+        // Check if we're on the client side
+        if (typeof window === 'undefined') return;
 
-  const setUserFn = useCallback(async (user?: TUser) => {
-    if (user) {
-      localStorage.setItem(localStorageKey, JSON.stringify(user));
-    } else {
-      localStorage.removeItem(localStorageKey);
-    }
+        const storedUser = localStorage.getItem(localStorageKey);
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
-    setUser(user || null);
-  }, []);
+    const setUserFn = useCallback(async (user?: TUser) => {
+        if (typeof window !== 'undefined') {
+            if (user) {
+                localStorage.setItem(localStorageKey, JSON.stringify(user));
+            } else {
+                localStorage.removeItem(localStorageKey);
+            }
+        }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        setUser: setUserFn,
-        isAuthenticated: !!user,
-        isLoading,
-        setLoading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+        setUser(user || null);
+    }, []);
+
+    return (
+        <AuthContext.Provider
+            value={{
+                user,
+                setUser: setUserFn,
+                isAuthenticated: !!user,
+                isLoading,
+                setLoading
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export { AuthProvider };

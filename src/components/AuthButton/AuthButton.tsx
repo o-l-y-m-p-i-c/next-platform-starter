@@ -62,6 +62,7 @@ const AuthButton = ({
   const { referralCode, setReferralCode } = useAppGlobal();
   const { fetchData } = useFetch();
   const isDesktop = useMediaQuery('(min-width:768px)');
+  const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
 
@@ -70,12 +71,25 @@ const AuthButton = ({
   const [open, setOpen] = useState(false);
   const [isNewUserWithRef, setNewUserWithRef] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleDialogOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+  // Don't render ConnectButton until RainbowKit is mounted
+  if (!mounted) {
+    return (
+      <Button variant="contained" size={size} disabled sx={sx}>
+        {typeof btnLabel === 'string' ? btnLabel : 'Connect'}
+      </Button>
+    );
+  }
 
   return (
     <>

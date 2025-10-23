@@ -5,6 +5,9 @@ function TradingViewWidget({ symbol = 'NASDAQ:AAPL' }) {
   const scriptAdded = useRef(false);
 
   useEffect(() => {
+    // Check if we're on the client side
+    if (typeof window === 'undefined') return;
+
     if (container.current && !scriptAdded.current) {
       const script = document.createElement('script');
       script.src =

@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box, Stack, styled } from '@mui/system';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { DexScreenerPair, Transactions } from '../TokenInfo/types';
 import { formatNumber } from '../../helpers/formatNumber';
 import TokenUSDPrice from '../TokenUSDPrice';
@@ -21,6 +21,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { TToken } from '@/types/responces/Token';
 import { QuickBuyButton } from '../QuickBuyButton';
 import { shortenAddress } from '../../utils/shortenAddress';
+import { usePathname } from 'next/navigation';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -213,7 +214,16 @@ const TokenMetrics: FC<{
     quoteToken,
   } = dexData;
 
-  const url = window.location.href;
+  const pathname = usePathname();
+  // Use state to handle URL on client side to prevent hydration mismatch
+  const [url, setUrl] = useState(`https://trenchspy.ai${pathname}`);
+
+  useEffect(() => {
+    // Update URL with actual window.location.href on client side
+    if (typeof window !== 'undefined') {
+      setUrl(window.location.href);
+    }
+  }, []);
 
   if (isLoading) {
     return (

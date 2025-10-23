@@ -254,7 +254,9 @@ export function QuickBuyButton({
   ) => {
     setSelectedIndex(index);
     setOpen(false);
-    localStorage.setItem(localQuickBuyParam, JSON.stringify(index));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(localQuickBuyParam, JSON.stringify(index));
+    }
   };
 
   const handleToggle = () => {
@@ -281,6 +283,13 @@ export function QuickBuyButton({
   }, [chainID]);
 
   useEffect(() => {
+    // Check if we're on the client side
+    if (typeof window === 'undefined') {
+      setSelectedIndex(validClosestsIndex);
+      setLoading(false);
+      return;
+    }
+
     const storedIndex = localStorage.getItem(localQuickBuyParam);
     if (storedIndex) {
       const isValid = !!(

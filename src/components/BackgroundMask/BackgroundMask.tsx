@@ -5,6 +5,9 @@ export const BackgroundMask = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0, debug: false });
 
   useEffect(() => {
+    // Check if we're on the client side
+    if (typeof window === 'undefined') return;
+
     let animation: gsap.core.Tween | null = null;
 
     const handleBodyMouseMove = (e: MouseEvent) => {

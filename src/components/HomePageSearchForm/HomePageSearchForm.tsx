@@ -23,15 +23,19 @@ export const HomePageSearchForm = () => {
 
     const searchParams = useSearchParams();
 
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(searchParams?.toString());
+
     const searchFromUrl = params.get('search') || '';
 
     const _query = searchParams?.get('search') ?? searchFromUrl;
-    
+
     // Debounce the search query to avoid too many requests
     const [debouncedQuery] = useDebouncedValue(_query, 500);
 
     const [includeInactive] = useState(() => {
+        // Check if we're on the client side before accessing localStorage
+        if (typeof window === 'undefined') return true;
+        
         const storedValue = localStorage.getItem('search-include-inactive');
         return storedValue ? JSON.parse(storedValue) : true;
     });
@@ -50,13 +54,13 @@ export const HomePageSearchForm = () => {
                 limit: String(limit),
                 page: String(currentPage || 1)
             });
-            
+
             const { data, error } = await fetchData(`/token/search?${queryParams.toString()}`);
-            
+
             if (error) {
                 throw error;
             }
-            
+
             return data as IBackendResponsePagination<TToken>;
         }
     });
