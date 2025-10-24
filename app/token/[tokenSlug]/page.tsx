@@ -27,10 +27,20 @@ async function isImageAccessible(url: string): Promise<boolean> {
 export async function generateMetadata({ params }: TokenPageProps): Promise<Metadata> {
     const { tokenSlug } = await params;
 
-    const headersList = await headers();
-    const host = headersList.get('host') || '';
-    const protocol = headersList.get('x-forwarded-proto') || 'https';
-    const baseUrl = `${protocol}://${host}`;
+    let baseUrl = config.APP_URL || 'https://trenchspy.com';
+
+    try {
+        const headersList = await headers();
+        const host = headersList.get('host');
+
+        if (host) {
+            const protocol = headersList.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+            baseUrl = `${protocol}://${host}`;
+        }
+    } catch (error) {
+        // Fallback to config.APP_URL if headers are not available
+        console.warn('Failed to get headers, using fallback URL');
+    }
 
     try {
         const response = await fetch(`${config.CORE_API_URL}/token/${tokenSlug}`, {
