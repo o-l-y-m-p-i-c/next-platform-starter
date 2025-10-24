@@ -1,3 +1,5 @@
+'use client';
+
 import { TokenPageSkeleton } from '../../../src/components/TokenPageSkeleton';
 import { MainLayoutWrapper } from '../../components/MainLayoutWrapper';
 
