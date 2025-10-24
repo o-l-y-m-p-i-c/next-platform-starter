@@ -2,6 +2,7 @@ import { MainLayoutWrapper } from '../../components/MainLayoutWrapper';
 import { TokenPage } from '../../../src/page-components';
 import { Metadata } from 'next';
 import { config } from '@/config/config';
+import { getChainInfo } from '@/utils/chainUtils';
 
 interface TokenPageProps {
     params: Promise<{
@@ -81,6 +82,67 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
 
         ogImageParams.append('image', finalImageUrl);
 
+        ogImageParams.append('address', token.addresses[0].blockchainAddress);
+
+        try {
+            const twitterResponse = await fetch(
+                `${config.CORE_API_URL}/token/${tokenSlug}/twitter?page=1&limit=10000`,
+                { next: { revalidate: 300 } } // Cache for 5 minutes
+            );
+
+            if (twitterResponse.ok) {
+                const twitterData = await twitterResponse.json();
+                const tweets = twitterData.data || [];
+
+                // Count sentiments
+                let bullishCount = 0;
+                let bearishCount = 0;
+                let neutralCount = 0;
+
+                tweets.forEach((tweet: any) => {
+                    const sentiment = tweet.sentiment?.toLowerCase();
+                    if (sentiment === 'positive') {
+                        bullishCount++;
+                    } else if (sentiment === 'negative') {
+                        bearishCount++;
+                    } else {
+                        neutralCount++;
+                    }
+                });
+
+                ogImageParams.append('mindshareBullish', String(bullishCount));
+                ogImageParams.append('mindshareBearish', String(bearishCount));
+                ogImageParams.append('mindshareNeutral', String(neutralCount));
+            }
+        } catch (error) {
+            console.error('Failed to fetch Twitter sentiment data:', error);
+            ogImageParams.append('mindshareBullish', '0');
+            ogImageParams.append('mindshareBearish', '0');
+            ogImageParams.append('mindshareNeutral', '0');
+        }
+
+        if (token.addresses && token.addresses.length > 0) {
+            console.log('Token address data:', {
+                blockchainAddress: token.addresses[0].blockchainAddress,
+                blockchainId: token.addresses[0].blockchainId
+            });
+
+            const chainInfo = getChainInfo({
+                blockchainAddress: token.addresses[0].blockchainAddress,
+                blockchainId: token.addresses[0].blockchainId
+            });
+
+            console.log('Chain info result:', chainInfo);
+
+            if (chainInfo?.image) {
+                const networkImageUrl = chainInfo?.image;
+                ogImageParams.append('network', networkImageUrl);
+                ogImageParams.append('networkLabel', chainInfo.label);
+            } else {
+                console.warn('No chain info found for blockchainId:', token.addresses[0].blockchainId);
+            }
+        }
+
         const ogImageUrl = `${config.APP_URL}/api/og?${ogImageParams.toString()}`;
 
         const priceInfo = token.stats?.tokenUSDPrice ? `Current Price: $${token.stats.tokenUSDPrice.toFixed(6)}` : '';
@@ -88,6 +150,7 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
         return {
             title,
             description,
+
             keywords: [
                 token.name,
                 token.symbol,
