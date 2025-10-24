@@ -27,7 +27,7 @@ const TokenPage = () => {
     const tokenSlug = typeof params?.tokenSlug === 'string' ? params.tokenSlug : undefined;
     const theme2 = useTheme();
     const { fetchData } = useFetch();
-    const { data, isLoading, isError } = useQuery<IBackendResponse<TToken>>({
+    const { data, isLoading, isFetching, isError } = useQuery<IBackendResponse<TToken>>({
         queryKey: [`/token/${tokenSlug}`],
         queryFn: async () => {
             const { data, error } = await fetchData<IBackendResponse<TToken>>(`/token/${tokenSlug}`);
@@ -75,7 +75,7 @@ const TokenPage = () => {
         }
     }, [data, theme]);
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <TokenPageSkeleton />;
     }
 
