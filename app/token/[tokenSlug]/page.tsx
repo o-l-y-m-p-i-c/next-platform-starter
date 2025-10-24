@@ -3,6 +3,7 @@ import { TokenPage } from '../../../src/page-components';
 import { Metadata } from 'next';
 import { config } from '@/config/config';
 import { getChainInfo } from '@/utils/chainUtils';
+import { headers } from 'next/headers';
 
 interface TokenPageProps {
     params: Promise<{
@@ -25,6 +26,11 @@ async function isImageAccessible(url: string): Promise<boolean> {
 
 export async function generateMetadata({ params }: TokenPageProps): Promise<Metadata> {
     const { tokenSlug } = await params;
+
+    const headersList = await headers();
+    const host = headersList.get('host') || '';
+    const protocol = headersList.get('x-forwarded-proto') || 'https';
+    const baseUrl = `${protocol}://${host}`;
 
     try {
         const response = await fetch(`${config.CORE_API_URL}/token/${tokenSlug}`, {
@@ -53,7 +59,7 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
             ? `${token.description.substring(0, 140)}...`
             : `Real-time analytics, price charts, and social sentiment analysis for ${token.name} (${token.symbol}). Track holders, mindshare, and market data.`;
 
-        const url = `${config.APP_URL}/token/${tokenSlug}`;
+        const url = `${baseUrl}/token/${tokenSlug}`;
 
         const ogImageParams = new URLSearchParams({
             title: token.name,
@@ -61,7 +67,7 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
             symbol: token.symbol
         });
 
-        const defaultImage = `${config.APP_URL}/default-token.png`;
+        const defaultImage = `${baseUrl}/default-token.png`;
 
         let finalImageUrl = defaultImage;
 
@@ -143,7 +149,7 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
             }
         }
 
-        const ogImageUrl = `${config.APP_URL}/api/og?${ogImageParams.toString()}`;
+        const ogImageUrl = `${baseUrl}/api/og?${ogImageParams.toString()}`;
 
         const priceInfo = token.stats?.tokenUSDPrice ? `Current Price: $${token.stats.tokenUSDPrice.toFixed(6)}` : '';
 
