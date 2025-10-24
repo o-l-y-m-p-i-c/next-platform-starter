@@ -19,9 +19,8 @@ import { AppGlobalProvider } from '../src/providers/AppGlobalProvider';
 import { isProd } from '../src/constants/staking.constants';
 import { useFetch } from '../src/hooks';
 import { Router } from './components/RouterWrapper';
-import { Stack } from '@mui/system';
+import EmotionRegistry from './EmotionRegistry';
 
-// Initialize Sentry
 if (typeof window !== 'undefined') {
     Sentry.init({
         dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -171,40 +170,42 @@ export function Providers({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         setMounted(true);
     }, []);
 
-    // Full app with wallet support
     return (
-        <AuthProvider>
-            <AppGlobalProvider>
-                <QueryClientProvider client={queryClient}>
-                    <WagmiProvider config={config}>
-                        <ThemeProvider theme={theme}>
-                            <CssBaseline />
-                            <SocketProvider>
-                                {mounted ? (
-                                    <RainbowKitProvider
-                                        modalSize="wide"
-                                        theme={darkTheme({
-                                            accentColor: '#7b3fe4',
-                                            accentColorForeground: 'white',
-                                            borderRadius: 'medium'
-                                        })}
-                                    >
-                                        <QueryDefaults />
-                                        <ReactQueryDevtools initialIsOpen={false} />
+        <EmotionRegistry>
+            <AuthProvider>
+                <AppGlobalProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <WagmiProvider config={config}>
+                            <ThemeProvider theme={theme}>
+                                <CssBaseline />
+                                <SocketProvider>
+                                    {mounted ? (
+                                        <RainbowKitProvider
+                                            modalSize="wide"
+                                            theme={darkTheme({
+                                                accentColor: '#7b3fe4',
+                                                accentColorForeground: 'white',
+                                                borderRadius: 'medium'
+                                            })}
+                                        >
+                                            <QueryDefaults />
+                                            <ReactQueryDevtools initialIsOpen={false} />
+                                            <Router>{children}</Router>
+                                        </RainbowKitProvider>
+                                    ) : (
                                         <Router>{children}</Router>
-                                    </RainbowKitProvider>
-                                ) : (
-                                    <Router>{children}</Router>
-                                )}
-                            </SocketProvider>
-                        </ThemeProvider>
-                    </WagmiProvider>
-                </QueryClientProvider>
-            </AppGlobalProvider>
-            <ToastContainer theme="dark" />
-        </AuthProvider>
+                                    )}
+                                </SocketProvider>
+                            </ThemeProvider>
+                        </WagmiProvider>
+                    </QueryClientProvider>
+                </AppGlobalProvider>
+                <ToastContainer theme="dark" />
+            </AuthProvider>
+        </EmotionRegistry>
     );
 }
