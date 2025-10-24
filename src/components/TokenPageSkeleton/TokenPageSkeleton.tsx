@@ -2,7 +2,6 @@
 
 import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { BackButton } from '../BackButton';
 import {
     TokenMetricsSkeleton,
     PriceChartSkeleton,
@@ -14,9 +13,6 @@ import {
 export const TokenPageSkeleton = () => {
     return (
         <>
-            <Stack mb={2} direction={'row'}>
-                <BackButton />
-            </Stack>
             <Grid container spacing={2} mb={2}>
                 <Grid
                     container
