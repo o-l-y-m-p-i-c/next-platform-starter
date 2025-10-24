@@ -11,11 +11,11 @@ import { Stack, styled } from '@mui/system';
 import {
     Button,
     Card,
-    CircularProgress,
     ClickAwayListener,
     IconButton,
     LinearProgress,
     linearProgressClasses,
+    Skeleton,
     Tooltip,
     Typography
 } from '@mui/material';
@@ -402,6 +402,10 @@ export function HoldersTable({
 
     if (!slug) return <></>;
 
+    if (isLoading) {
+        return <Skeleton variant="rounded" height={600} />;
+    }
+
     const top5HoldInPerc = (summTop5Holdings / (totalSupplyUI * 1)) * 100;
     const top10HoldInPerc = (summTop10Holdings / (totalSupplyUI * 1)) * 100;
     const top20HoldInPerc = (summTop20Holdings / (totalSupplyUI * 1)) * 100;
@@ -477,16 +481,7 @@ export function HoldersTable({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {isLoading && (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} align="center">
-                                        <Stack sx={{ minHeight: 543 }} alignItems={'center'} justifyContent={'center'}>
-                                            <CircularProgress size={35} />
-                                        </Stack>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                            {!isLoading && error && (
+                            {error && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} align="center">
                                         <Stack sx={{ minHeight: 543 }} alignItems={'center'} justifyContent={'center'}>
@@ -495,22 +490,21 @@ export function HoldersTable({
                                     </TableCell>
                                 </TableRow>
                             )}
-                            {!isLoading &&
-                                newRows.map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.rank}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format ? column.format(value) : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                            {!isLoading && newRows.length === 0 && (
+                            {newRows.map((row) => {
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.rank}>
+                                        {columns.map((column) => {
+                                            const value = row[column.id];
+                                            return (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.format ? column.format(value) : value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                            {!error && newRows.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} align="center">
                                         <Stack sx={{ minHeight: 543 }} alignItems={'center'} justifyContent={'center'}>
