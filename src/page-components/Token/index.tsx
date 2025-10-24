@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, ButtonGroup, CircularProgress, Stack, Typography, useTheme } from '@mui/material';
+import { Button, ButtonGroup, Stack, Typography, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { useParams } from 'next/navigation';
@@ -20,6 +20,7 @@ import { TokenMetrics } from '@/components/TokenMetrics';
 import { HoldersTable } from '@/components/HoldersTable';
 import { PriceChangeTable } from '@/components/PriceChangeTable';
 import TokenTwitterSentiments from '@/modules/twitter/components/TokenTwitterSentiments';
+import { TokenPageSkeleton } from '@/components/TokenPageSkeleton';
 
 const TokenPage = () => {
     const params = useParams();
@@ -75,16 +76,7 @@ const TokenPage = () => {
     }, [data, theme]);
 
     if (isLoading || isFetching) {
-        return (
-            <Stack flex={1}>
-                <Box>
-                    <BackButton />
-                </Box>
-                <Stack justifyContent={'center'} alignItems={'center'} flex={1}>
-                    <CircularProgress />
-                </Stack>
-            </Stack>
-        );
+        return <TokenPageSkeleton />;
     }
 
     if (isError || !data || !data.data) {
@@ -275,12 +267,7 @@ const TokenPage = () => {
                                                 >
                                                     3M
                                                 </Button>
-                                                {/* {newLocal} */}
                                             </ButtonGroup>
-                                            {/* <TokenTwitterFilterMenu
-                        hideSmallAccFn={setFollowerCountFn}
-                        hideSmallAcc={followerCount.minFollowers !== 0}
-                      /> */}
                                         </Stack>
                                     </Stack>
                                 </Stack>
