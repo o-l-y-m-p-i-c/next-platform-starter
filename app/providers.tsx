@@ -11,7 +11,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import * as Sentry from '@sentry/react';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AuthProvider } from '../src/providers/AuthProvider';
 import { SocketProvider } from '../src/providers/SocketProvider';
@@ -169,40 +169,43 @@ function QueryDefaults() {
 export function Providers({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         setMounted(true);
     }, []);
 
     return (
-        <AuthProvider>
-            <AppGlobalProvider>
-                <QueryClientProvider client={queryClient}>
-                    <WagmiProvider config={config}>
-                        <ThemeProvider theme={theme}>
-                            <SocketProvider>
-                                {mounted ? (
-                                    <RainbowKitProvider
-                                        modalSize="wide"
-                                        theme={darkTheme({
-                                            accentColor: '#7b3fe4',
-                                            accentColorForeground: 'white',
-                                            borderRadius: 'medium'
-                                        })}
-                                    >
-                                        <QueryDefaults />
-                                        <ReactQueryDevtools initialIsOpen={false} />
+        <EmotionRegistry>
+            <AuthProvider>
+                <AppGlobalProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <WagmiProvider config={config}>
+                            <ThemeProvider theme={theme}>
+                                <CssBaseline />
+                                <SocketProvider>
+                                    {mounted ? (
+                                        <RainbowKitProvider
+                                            modalSize="wide"
+                                            theme={darkTheme({
+                                                accentColor: '#7b3fe4',
+                                                accentColorForeground: 'white',
+                                                borderRadius: 'medium'
+                                            })}
+                                        >
+                                            <QueryDefaults />
+                                            <ReactQueryDevtools initialIsOpen={false} />
+                                            <Router>{children}</Router>
+                                        </RainbowKitProvider>
+                                    ) : (
                                         <Router>{children}</Router>
-                                    </RainbowKitProvider>
-                                ) : (
-                                    <Router>{children}</Router>
-                                )}
-                            </SocketProvider>
-                        </ThemeProvider>
-                    </WagmiProvider>
-                </QueryClientProvider>
-            </AppGlobalProvider>
-            <ToastContainer theme="dark" />
-        </AuthProvider>
+                                    )}
+                                </SocketProvider>
+                            </ThemeProvider>
+                        </WagmiProvider>
+                    </QueryClientProvider>
+                </AppGlobalProvider>
+                <ToastContainer theme="dark" />
+            </AuthProvider>
+        </EmotionRegistry>
     );
 }
