@@ -44,7 +44,7 @@ const AppGlobalProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffectEvent(() => {
         setAllLocalStorageData();
-    });
+    }, []);
 
     const setAnimationFn = useCallback(async (animationFlag?: boolean) => {
         if (typeof window !== 'undefined') {
