@@ -5,11 +5,12 @@ import { Header } from '@/components/Header/index';
 import { useAppGlobal, useAuth, useFetch } from '../../hooks';
 import { Footer } from '@/components/Footer';
 import { Stack } from '@mui/system';
-import { useEffect, useMemo, Suspense } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 // import { Preloader } from '@/components/Preloader';
 import { BackgroundMask } from '@/components/BackgroundMask';
+import { Preloader } from '@/components/Preloader';
 
 export interface UserData {
     data: {
@@ -72,7 +73,7 @@ const Layout = ({ theme, children }: { theme?: string; children?: React.ReactNod
 
     return (
         <Stack flex={1} minHeight={'100vh'}>
-            {/* <Preloader /> */}
+            <Preloader />
             <Suspense fallback={null}>
                 <SearchParamsHandler />
             </Suspense>
