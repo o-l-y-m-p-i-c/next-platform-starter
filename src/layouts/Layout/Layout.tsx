@@ -8,7 +8,7 @@ import { Stack } from '@mui/system';
 import { useEffect, useMemo, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
-import { Preloader } from '@/components/Preloader';
+// import { Preloader } from '@/components/Preloader';
 import { BackgroundMask } from '@/components/BackgroundMask';
 
 export interface UserData {
@@ -72,7 +72,7 @@ const Layout = ({ theme, children }: { theme?: string; children?: React.ReactNod
 
     return (
         <Stack flex={1} minHeight={'100vh'}>
-            <Preloader />
+            {/* <Preloader /> */}
             <Suspense fallback={null}>
                 <SearchParamsHandler />
             </Suspense>
