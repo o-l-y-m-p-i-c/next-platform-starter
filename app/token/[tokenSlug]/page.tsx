@@ -90,60 +90,42 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
 
         ogImageParams.append('address', token.addresses[0].blockchainAddress);
 
-        // try {
-        //     // Use AbortController for timeout
-        //     const controller = new AbortController();
-        //     const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        try {
+            const twitterResponse = await fetch(
+                `${config.CORE_API_URL}/token/${tokenSlug}/twitter?page=1&limit=10000`,
+                { next: { revalidate: 300 } } // Cache for 5 minutes
+            );
 
-        //     const twitterResponse = await fetch(
-        //         `${config.CORE_API_URL}/token/${tokenSlug}/twitter?page=1&limit=1000`, // Reduced from 10000 to 1000
-        //         {
-        //             cache: 'no-store', // Disable caching - response is too large
-        //             signal: controller.signal
-        //         }
-        //     );
+            if (twitterResponse.ok) {
+                const twitterData = await twitterResponse.json();
+                const tweets = twitterData.data || [];
 
-        //     clearTimeout(timeoutId);
+                // Count sentiments
+                let bullishCount = 0;
+                let bearishCount = 0;
+                let neutralCount = 0;
 
-        //     if (twitterResponse.ok) {
-        //         const twitterData = await twitterResponse.json();
-        //         const tweets = twitterData.data || [];
+                tweets.forEach((tweet: any) => {
+                    const sentiment = tweet.sentiment?.toLowerCase();
+                    if (sentiment === 'positive') {
+                        bullishCount++;
+                    } else if (sentiment === 'negative') {
+                        bearishCount++;
+                    } else {
+                        neutralCount++;
+                    }
+                });
 
-        //         // Count sentiments
-        //         let bullishCount = 0;
-        //         let bearishCount = 0;
-        //         let neutralCount = 0;
-
-        //         tweets.forEach((tweet: any) => {
-        //             const sentiment = tweet.sentiment?.toLowerCase();
-        //             if (sentiment === 'positive') {
-        //                 bullishCount++;
-        //             } else if (sentiment === 'negative') {
-        //                 bearishCount++;
-        //             } else {
-        //                 neutralCount++;
-        //             }
-        //         });
-
-        //         ogImageParams.append('mindshareBullish', String(bullishCount));
-        //         ogImageParams.append('mindshareBearish', String(bearishCount));
-        //         ogImageParams.append('mindshareNeutral', String(neutralCount));
-        //     } else {
-        //         // API returned error status
-        //         ogImageParams.append('mindshareBullish', '0');
-        //         ogImageParams.append('mindshareBearish', '0');
-        //         ogImageParams.append('mindshareNeutral', '0');
-        //     }
-        // } catch (error) {
-        //     console.warn('Failed to fetch Twitter sentiment data (using defaults):', error instanceof Error ? error.message : error);
-        //     ogImageParams.append('mindshareBullish', '0');
-        //     ogImageParams.append('mindshareBearish', '0');
-        //     ogImageParams.append('mindshareNeutral', '0');
-        // }
-
-        ogImageParams.append('mindshareBullish', String(0));
-        ogImageParams.append('mindshareBearish', String(0));
-        ogImageParams.append('mindshareNeutral', String(0));
+                ogImageParams.append('mindshareBullish', String(bullishCount));
+                ogImageParams.append('mindshareBearish', String(bearishCount));
+                ogImageParams.append('mindshareNeutral', String(neutralCount));
+            }
+        } catch (error) {
+            console.error('Failed to fetch Twitter sentiment data:', error);
+            ogImageParams.append('mindshareBullish', '0');
+            ogImageParams.append('mindshareBearish', '0');
+            ogImageParams.append('mindshareNeutral', '0');
+        }
 
         if (token.addresses && token.addresses.length > 0) {
             console.log('Token address data:', {
