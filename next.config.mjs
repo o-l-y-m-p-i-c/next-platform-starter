@@ -20,8 +20,6 @@ const nextConfig = {
       },
     ],
   },
-  // Empty turbopack config to acknowledge we're using Turbopack
-  turbopack: {},
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -43,13 +41,11 @@ const nextConfig = {
     return config;
   },
   transpilePackages: [
-    '@metamask/sdk',
     '@rainbow-me/rainbowkit',
     '@wagmi/core',
     'wagmi',
     '@tanstack/react-query',
   ],
-  serverExternalPackages: ['pino-pretty', 'lokijs', 'encoding'],
   experimental: {
     optimizePackageImports: [
       '@mui/material',
