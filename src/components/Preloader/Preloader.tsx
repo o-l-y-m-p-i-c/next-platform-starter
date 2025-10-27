@@ -5,7 +5,6 @@ import Lottie from 'lottie-react';
 import { useEffect, useRef, useState } from 'react';
 import preloaderLottie from '@/assets/Lotties/intro_square.json';
 
-// Track if preloader has already been shown in this session
 let hasShownPreloader = false;
 
 export const Preloader = () => {
@@ -17,6 +16,7 @@ export const Preloader = () => {
     useEffect(() => {
         // If preloader was already shown, don't render it
         if (hasShownPreloader) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setShouldRender(false);
             return;
         }
