@@ -1,43 +1,69 @@
-# Next.js on Netlify Platform Starter
+# TrenchSpy.ai
 
-[Live Demo](https://nextjs-platform-starter.netlify.app/)
+**Spot the Most-Hyped Tokens Before Everyone Else**
 
-A modern starter based on Next.js 16 (App Router), Tailwind, and [Netlify Core Primitives](https://docs.netlify.com/core/overview/#develop) (Edge Functions, Image CDN, Blob Store).
+TrenchSpy is a cryptocurrency analytics platform that helps traders and investors identify trending tokens before they gain mainstream attention. The platform combines social media signals, on-chain analytics, and AI-powered hype detection.
 
-In this site, Netlify Core Primitives are used both implictly for running Next.js features (e.g. Route Handlers, image optimization via `next/image`, and more) and also explicitly by the user code.
+## Features
 
-Implicit usage means you're using any Next.js functionality and everything "just works" when deployed - all the plumbing is done for you. Explicit usage is framework-agnostic and typically provides more features than what Next.js exposes.
+- 🔍 **Hype Detector** - AI-powered token hype analysis
+- 🗺️ **Hype Map** - Visual representation of trending tokens
+- 📊 **Token Analytics** - Comprehensive token metrics and holder analysis
+- 🐦 **Social Signals** - Twitter and Telegram integration
+- 👥 **KOL Tracking** - Monitor influential crypto personalities
+- 💎 **Sniper Tracking** - Identify early token buyers
+- 🔄 **Real-time Updates** - WebSocket-powered live data
+- 🌐 **Web3 Integration** - Wallet connection and on-chain interactions
 
-## Deploying to Netlify
+## Tech Stack
 
-Click the button below to deploy this template to your Netlify account.
+- **Frontend**: Next.js, TypeScript
+- **UI**: Material-UI v6, Emotion
+- **Web3**: Wagmi, Viem, RainbowKit
+- **Data Viz**: D3.js, TradingView, MUI Charts
+- **State**: TanStack Query, Context API
+- **Real-time**: Socket.io
+- **Monitoring**: Sentry, Google Analytics
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/next-platform-starter)
+## Development
 
-## Developing Locally
+```bash
+# Install dependencies
+npm install
 
-1. Clone this repository, then run `npm install` in its root directory.
+# Start development server
+npm run dev
 
-2. For the starter to have full functionality locally (e.g. edge functions, blob store), please ensure you have an up-to-date version of Netlify CLI. Run:
+# Build for production
+npm run build
 
+# Preview production build
+npm run preview
+
+# Lint code
+npm run lint
+
+# Run proxy server (for local API testing)
+npm run proxy
 ```
-npm install netlify-cli@latest -g
+
+## Environment Variables
+
+Create a `.env` file with the following variables:
+
+```env
+NEXT_PUBLIC_SENTRY_DSN=
+NEXT_PUBLIC_API_ID=
+NEXT_PUBLIC_CORE_BACKEND_DOMAIN=
+NEXT_PUBLIC_CORE_BACKEND_USE_HTTPS=
+NEXT_PUBLIC_AUTH_ROUTINGS=
+NEXT_PUBLIC_IS_PROD=
+NEXT_PUBLIC_BSC_STAKING=
+NEXT_PUBLIC_BSCTN_STAKING=
+NEXT_PUBLIC_BSC_MOCK_TOKEN=
+NEXT_PUBLIC_BSCTN_MOCK_TOKEN=
 ```
 
-3. Link your local repository to the deployed Netlify site. This will ensure you're using the same runtime version for both local development and your deployed site.
+## License
 
-```
-netlify link
-```
-
-4. Then, run the Next.js development server via Netlify CLI:
-
-```
-netlify dev
-```
-
-If your browser doesn't navigate to the site automatically, visit [localhost:8888](http://localhost:8888).
-
-## Resources
-
-- Check out the [Next.js on Netlify docs](https://docs.netlify.com/frameworks/next-js/overview/)
+Proprietary - All rights reserved
