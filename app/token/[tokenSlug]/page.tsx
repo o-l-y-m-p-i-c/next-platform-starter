@@ -146,10 +146,17 @@ export async function generateMetadata({ params }: TokenPageProps): Promise<Meta
         ogImageParams.append('mindshareNeutral', String(0));
 
         if (token.addresses && token.addresses.length > 0) {
+            console.log('Token address data:', {
+                blockchainAddress: token.addresses[0].blockchainAddress,
+                blockchainId: token.addresses[0].blockchainId
+            });
+
             const chainInfo = getChainInfo({
                 blockchainAddress: token.addresses[0].blockchainAddress,
                 blockchainId: token.addresses[0].blockchainId
             });
+
+            console.log('Chain info result:', chainInfo);
 
             if (chainInfo?.image) {
                 const networkImageUrl = chainInfo?.image;

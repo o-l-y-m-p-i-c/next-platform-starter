@@ -26,6 +26,8 @@ export async function GET(req: Request) {
             'https://fonts.gstatic.com/s/doto/v3/t5tJIRMbNJ6TQG7Il_EKPqP9zTnvqqGNcuvLMt1JIphF3-Wezw.ttf'
         ).then((res) => res.arrayBuffer());
 
+        console.log('searchParams', searchParams);
+
         return new ImageResponse(
             (
                 <div style={{ position: 'relative', height: '100%', width: '100%', display: 'flex' }}>
